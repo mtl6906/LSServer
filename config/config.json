@@ -1,0 +1,9 @@
+{
+	"port": 8081,
+	"thread_number": 8,
+	"worker_waiting_time": 100,
+	"sender_waiting_time": 100,
+	"max_connection_number": 60000,
+	"session_buffer_size": 10240,
+	"project_path":"project"
+}
