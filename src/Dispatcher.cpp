@@ -7,6 +7,8 @@
 #include "Worker.h"
 #include "UserServlet.h"
 
+#define FILTER_CONF_SIZE
+
 using std::queue;
 using std::map;
 
@@ -18,7 +20,6 @@ namespace ls
 		{"/user", new UserServlet()}
 	})
 	{
-		suffixFilter[".html"] = &fileServlet;
 	}
 	Dispatcher::~Dispatcher()
 	{
@@ -56,20 +57,7 @@ namespace ls
 				oq.emplace(session, it->second);
 				continue;
 			}
-		//	在后缀过滤器中寻找
-			int n = uri.find_last_of('.');
-			if(n == Text::npos)
-				it = suffixFilter.end();
-			else
-				it = suffixFilter.find(uri.substr(n));
-			if(it != suffixFilter.end())
-			{
-				oq.emplace(session, it->second);
-				continue;
-			}
-			ls_log_tag(DISPATCHER_LOG, "not found");
-			res.Code() = LS_NOT_FOUND;
-			oq.emplace(session, &errorServlet);
+			oq.emplace(session, &fileServlet);
 		}
 		return LS_OK;
 	}

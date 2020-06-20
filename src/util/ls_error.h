@@ -2,6 +2,7 @@
 #define LS_ERROR_H
 
 #include "ls_util.h"
+#include "ls_def.h"
 
 #define RECVER_LOG "RECVER_LOG"
 #define SENDER_LOG "SENDER_LOG"
@@ -13,11 +14,6 @@
 #define HTTPSERVLET_LOG "HTTPSERVLET_LOG"
 #define MAIN_LOG "MAIN_LOG"
 #define CORE_LOG "CORE_LOG"
-
-#define LS_OK 0
-#define LS_FAILED -1
-#define LS_NOT_FOUND -2
-#define LS_INCOMPLETE -3
 
 #define FUNCTION_TRACE() ls_log_tag("FT", "[ %s ]\n line %d in file \"%s\"\n", __func__, __LINE__, __FILE__);
 #define ls_log_tag(tag, fmt, ...) if(getenv(tag)) \
