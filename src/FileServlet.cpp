@@ -16,8 +16,8 @@ namespace ls
 	{
 		methodMap["GET"]["*"] = [this](HttpRequest &req, HttpResponse &res) {
 			auto pathname = cc.project_path + "/www" + req.URI();
-			FILE *fp = fopen(pathname.c_str(), "r");
-			err_with(fp, == NULL, "fopen error", return LS_NOT_FOUND);
+			FILE *fp = NULL;
+			err_with(fp = fopen(pathname.c_str(), "r"), == NULL, "fopen error", return LS_NOT_FOUND);
 			struct stat statbuf;
 			fstat(fileno(fp), &statbuf);
 			res.Body().resize(statbuf.st_size);

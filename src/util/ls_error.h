@@ -25,10 +25,10 @@
 					printf("\n"); \
 				}
 #define err_with(ret, condition, msg, op) { \
+						errno = 0;\
 						auto rc = (ret); \
 						if(rc condition) \
 						{ \
-							FUNCTION_TRACE(); \
 							if(errno) \
 							{ \
 								perror(msg); \
@@ -36,6 +36,7 @@
 							} \
 							else if(msg[0] != '\0') \
 								fprintf(stderr, "%s\n", msg); \
+							FUNCTION_TRACE(); \
 							op; \
 						} \
 					}
