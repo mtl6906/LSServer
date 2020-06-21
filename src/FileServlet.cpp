@@ -5,6 +5,7 @@
 #include "sys/stat.h"
 #include "fcntl.h"
 #include "Config.h"
+#include "string"
 
 namespace ls
 {
@@ -16,13 +17,10 @@ namespace ls
 	{
 		methodMap["GET"]["*"] = [this](HttpRequest &req, HttpResponse &res) {
 			auto pathname = cc.project_path + "/www" + req.URI();
-			FILE *fp = NULL;
-			err_with(fp = fopen(pathname.c_str(), "r"), == NULL, "fopen error", return LS_NOT_FOUND);
 			struct stat statbuf;
-			fstat(fileno(fp), &statbuf);
-			res.Body().resize(statbuf.st_size);
-			err_sys(fread((char *)res.Body().c_str(), 1, res.Body().size(), fp), "fread error"); 
-			err_sys(fclose(fp), "fclose error");
+			err_with(lstat(pathname.c_str(), &statbuf), < 0, "lstat error", return LS_FAILED);
+			res.Filename() = pathname;
+			res.SetAttribute("Content-Length", std::to_string(statbuf.st_size+2));
 			return LS_OK;	
 		};
 	}

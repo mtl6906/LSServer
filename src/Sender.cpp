@@ -25,17 +25,31 @@ namespace ls
 
 			HttpResponse &res = session -> Response();
 			Buffer &sb = session -> SendBuffer();
-			Text text;
-			res.ParseTo(text);
-			sb.Push(text);
-			
-			int n;
-			while((n = send(res.Fd(), sb.Begin(), sb.Size(), 0)) > 0)
+			Text header;
+			res.ParseTo(header);
+		//	先发送header, 在根据filename是否为空决定是否进行读文件操作
+			sb.Push(header);
+			session->Send();
+
+			if(res.Filename() != "")
 			{
-				sb.MoveOffset(n);
-				ls_log_tag(SENDER_LOG, "send %d bytes data", n);
+				FILE *fp = fopen(res.Filename().c_str(), "r");
+				int n, len = stoi(res.GetAttribute("Content-Length"));
+				while((n = fread(sb.End(), 1, sb.RestSize(), fp)) > 0)
+				{
+					sb.MoveBuffersize(n);
+					session->Send();
+					sb.Clear();
+				}
+				sb.Push("\r\n");
+				session->Send();
+				fclose(fp);
 			}
-			FUNCTION_TRACE();
+			else
+			{
+				sb.Push(res.Body());
+				session->Send();
+			}
 			core -> Release(res.Fd());
 			err_with(sb.Size(), != 0, "send failed", continue);
 		}

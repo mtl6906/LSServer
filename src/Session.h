@@ -23,6 +23,7 @@ namespace ls
 			HttpResponse &Response();
 			Buffer &RecvBuffer();
 			Buffer &SendBuffer();
+			int Send();
 	};
 }
 

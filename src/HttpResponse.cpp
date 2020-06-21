@@ -108,4 +108,18 @@ namespace ls
 		message = "";
 		attribute.clear();
 	}
+	Text &HttpResponse::Filename()
+	{
+		return filename;
+	}
+	void HttpResponse::SetAttribute(const string &key, const string &value)
+	{
+		attribute[key] = value;
+	}
+	Text HttpResponse::GetAttribute(const string &key)
+	{
+		auto it = attribute.find(key);
+		err_with(it, == attribute.end(), "GetAttribute error", return "");
+		return it->second;
+	}
 }

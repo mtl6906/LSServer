@@ -17,13 +17,16 @@ namespace ls
 		Text body;
 		Text message;
 		std::map<Text, Text> attribute;
+		Text filename;
 		public:
 			int &Fd();
 			int &Code();
 			Text &Body();
-			int SetAttribute(const Text &key, const Text &value);
+			Text &Filename();
+			void SetAttribute(const Text &key, const Text &value);
+			Text GetAttribute(const Text &key);
 			int SetDefaultHeader(HttpRequest &req);
-
+			
 			int ParseFrom(Text &text) override;			
 			void ParseTo(Text &text) override;
 

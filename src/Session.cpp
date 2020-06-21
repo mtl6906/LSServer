@@ -5,6 +5,7 @@
 #include "HttpResponse.h"
 #include "ls_error.h"
 #include "Session.h"
+#include "sys/socket.h"
 
 namespace ls
 {
@@ -55,6 +56,13 @@ namespace ls
 		request.Body().resize(len);
 		recvBuffer.Pop(request.Body());
 		return LS_OK;
+	}
+	int Session::Send()
+	{
+		int n = 0;
+		while((n = send(response.Fd(), sendBuffer.Begin(), sendBuffer.Size(), 0)) > 0)
+			sendBuffer.MoveOffset(n);
+		return sendBuffer.Size() == 0 ? LS_OK : LS_FAILED;
 	}
 };
 

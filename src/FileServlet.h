@@ -2,7 +2,6 @@
 #define FILESERVLET_H
 
 #include "HttpServlet.h"
-#include "Buffer.h"
 
 namespace ls
 {
