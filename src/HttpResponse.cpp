@@ -25,7 +25,7 @@ namespace ls
 	{
 		version = req.Version();
 		attribute["Content-Encoding"] = "identity";
-		attribute["Content-Type"] = "text/html;charset=utf-8";
+		attribute["Content-Type"] = "text/plain";
 		attribute["Server"] = "LSS/1.0";
 
 		char timeFormat[128];
